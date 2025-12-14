@@ -1,28 +1,36 @@
 import os
 import requests
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
-API_KEY = os.getenv("SORARE_API_KEY")
+TOKEN = os.getenv("SORARE_JWT_TOKEN")
+AUD = os.getenv("SORARE_JWT_AUD")
 API_URL = "https://api.sorare.com/graphql"
 
+if not TOKEN or not AUD:
+    raise ValueError("Missing SORARE_JWT_TOKEN or SORARE_JWT_AUD in .env")
+
 query = """
-query MyUser {
+query CurrentUserQuery {
   currentUser {
     slug
-    nickname
+    email
   }
 }
 """
 
-response = requests.post(
+resp = requests.post(
     API_URL,
     json={"query": query},
     headers={
-        "Authorization": f"Bearer {API_KEY}"
-    }
+        "content-type": "application/json",
+        "Authorization": f"Bearer {TOKEN}",
+        "JWT-AUD": AUD,
+    },
+    timeout=30,
 )
 
-print(response.json())
-
+data = resp.json()
+print(json.dumps(data, indent=2))
