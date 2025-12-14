@@ -144,6 +144,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Generated data
+cards_raw.json
+
 # Spyder project settings
 .spyderproject
 .spyproject
