@@ -19,32 +19,21 @@ HEADERS = {
 CARD_SLUG = "albert-rusnak-2025-super_rare-2"
 
 query = """
-query CardHistory($slugs: [String!]!) {
+query CardInspect($slugs: [String!]!) {
   anyCards(slugs: $slugs) {
     slug
+    name
+    rarityTyped
+    seasonYear
 
     ... on Card {
-      tokenOwnerships(first: 20) {
-        nodes {
-          owner {
-            slug
-          }
-          from {
-            slug
-          }
-          to {
-            slug
-          }
-          transferTimestamp
-        }
+      tokenOwner {
+        slug
       }
     }
   }
 }
 """
-
-
-
 
 resp = requests.post(
     API_URL,
